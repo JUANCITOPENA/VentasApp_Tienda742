@@ -1,0 +1,162 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:models="clr-namespace:VentasApp_Tienda742.Models"
+             x:Class="VentasApp_Tienda742.Views.DashboardReportesPage"
+             Title="📊 Dashboard y Reportes"
+             BackgroundColor="#F8FAFC">
+
+    <Grid RowDefinitions="Auto, Auto, Auto, *" Padding="16" RowSpacing="12">
+
+        <!-- Fila 0: Mini Dashboard (4 Tarjetas Bento KPI) -->
+        <Grid Grid.Row="0" ColumnDefinitions="*, *, *, *" ColumnSpacing="10">
+
+            <!-- KPI 1: Total Ventas -->
+            <Border Grid.Column="0" BackgroundColor="#FFFFFF" Stroke="#E2E8F0" StrokeThickness="1" StrokeShape="RoundRectangle 10" Padding="12">
+                <VerticalStackLayout Spacing="4">
+                    <Label Text="💰 Total Ventas" FontSize="11" TextColor="#64748B" FontAttributes="Bold" />
+                    <Label x:Name="LblKpiTotalVentas" Text="RD$ 0.00" FontSize="15" FontAttributes="Bold" TextColor="#16A34A" />
+                    <Label Text="Ingresos Totales" FontSize="10" TextColor="#94A3B8" />
+                </VerticalStackLayout>
+            </Border>
+
+            <!-- KPI 2: Total Pedidos -->
+            <Border Grid.Column="1" BackgroundColor="#FFFFFF" Stroke="#E2E8F0" StrokeThickness="1" StrokeShape="RoundRectangle 10" Padding="12">
+                <VerticalStackLayout Spacing="4">
+                    <Label Text="🧾 Pedidos" FontSize="11" TextColor="#64748B" FontAttributes="Bold" />
+                    <Label x:Name="LblKpiTotalPedidos" Text="0" FontSize="16" FontAttributes="Bold" TextColor="#1E3A8A" />
+                    <Label Text="Transacciones" FontSize="10" TextColor="#94A3B8" />
+                </VerticalStackLayout>
+            </Border>
+
+            <!-- KPI 3: Clientes -->
+            <Border Grid.Column="2" BackgroundColor="#FFFFFF" Stroke="#E2E8F0" StrokeThickness="1" StrokeShape="RoundRectangle 10" Padding="12">
+                <VerticalStackLayout Spacing="4">
+                    <Label Text="👥 Clientes" FontSize="11" TextColor="#64748B" FontAttributes="Bold" />
+                    <Label x:Name="LblKpiTotalClientes" Text="0" FontSize="16" FontAttributes="Bold" TextColor="#0F172A" />
+                    <Label Text="Cartera Activa" FontSize="10" TextColor="#94A3B8" />
+                </VerticalStackLayout>
+            </Border>
+
+            <!-- KPI 4: Stock -->
+            <Border Grid.Column="3" BackgroundColor="#FFFFFF" Stroke="#E2E8F0" StrokeThickness="1" StrokeShape="RoundRectangle 10" Padding="12">
+                <VerticalStackLayout Spacing="4">
+                    <Label Text="📦 Stock Total" FontSize="11" TextColor="#64748B" FontAttributes="Bold" />
+                    <Label x:Name="LblKpiTotalStock" Text="0 uds" FontSize="16" FontAttributes="Bold" TextColor="#D97706" />
+                    <Label Text="Unidades en Tienda" FontSize="10" TextColor="#94A3B8" />
+                </VerticalStackLayout>
+            </Border>
+        </Grid>
+
+        <!-- Fila 1: Botonera de Reportes PDF -->
+        <Border Grid.Row="1" BackgroundColor="#FFFFFF" Stroke="#E2E8F0" StrokeThickness="1" StrokeShape="RoundRectangle 10" Padding="10">
+            <FlexLayout JustifyContent="SpaceBetween" AlignItems="Center" Wrap="Wrap">
+                <HorizontalStackLayout Spacing="8">
+                    <Button Text="📄 PDF Reporte Ventas"
+                            Clicked="OnGenerarReporteVentasPdfClicked"
+                            BackgroundColor="#1E3A8A"
+                            TextColor="#FFFFFF"
+                            FontSize="12"
+                            FontAttributes="Bold"
+                            CornerRadius="8"
+                            HeightRequest="38" />
+
+                    <Button Text="📦 PDF Reporte Inventario"
+                            Clicked="OnGenerarReporteInventarioPdfClicked"
+                            BackgroundColor="#047857"
+                            TextColor="#FFFFFF"
+                            FontSize="12"
+                            FontAttributes="Bold"
+                            CornerRadius="8"
+                            HeightRequest="38" />
+                </HorizontalStackLayout>
+
+                <Button Text="🔄 Refrescar"
+                        Clicked="OnRefrescarClicked"
+                        BackgroundColor="#F1F5F9"
+                        TextColor="#0F172A"
+                        BorderColor="#CBD5E1"
+                        BorderWidth="1"
+                        FontSize="12"
+                        FontAttributes="Bold"
+                        CornerRadius="8"
+                        HeightRequest="38" />
+            </FlexLayout>
+        </Border>
+
+        <!-- Fila 2: Barra de Búsqueda -->
+        <Border Grid.Row="2" BackgroundColor="#FFFFFF" Stroke="#E2E8F0" StrokeThickness="1" StrokeShape="RoundRectangle 8" Padding="2">
+            <SearchBar x:Name="TxtBuscarVentas"
+                       Placeholder="🔍 Buscar ventas por cliente, producto o ciudad..."
+                       PlaceholderColor="#94A3B8"
+                       TextColor="#0F172A"
+                       FontSize="13"
+                       TextChanged="OnBuscarVentasChanged" />
+        </Border>
+
+        <!-- Fila 3: Listado de Ventas -->
+        <Grid Grid.Row="3">
+            <CollectionView x:Name="ColeccionVentas" SelectionMode="None">
+                <CollectionView.ItemsLayout>
+                    <LinearItemsLayout Orientation="Vertical" ItemSpacing="8" />
+                </CollectionView.ItemsLayout>
+
+                <CollectionView.EmptyView>
+                    <VerticalStackLayout HorizontalOptions="Center" VerticalOptions="Center" Spacing="8" Padding="20">
+                        <Label Text="📋" FontSize="36" HorizontalOptions="Center" />
+                        <Label Text="No se encontraron ventas para mostrar." FontSize="14" TextColor="#64748B" HorizontalOptions="Center" />
+                    </VerticalStackLayout>
+                </CollectionView.EmptyView>
+
+                <CollectionView.ItemTemplate>
+                    <DataTemplate x:DataType="models:Venta">
+                        <Border BackgroundColor="#FFFFFF" Stroke="#E2E8F0" StrokeThickness="1" StrokeShape="RoundRectangle 10" Padding="12">
+                            <Grid ColumnDefinitions="Auto, *, Auto, Auto" ColumnSpacing="12" VerticalOptions="Center">
+                                
+                                <!-- ID y Fecha -->
+                                <VerticalStackLayout Grid.Column="0" Spacing="2" WidthRequest="75" VerticalOptions="Center">
+                                    <Label Text="{Binding PedidoID, StringFormat='#{0}'}" FontSize="14" FontAttributes="Bold" TextColor="#1E3A8A" />
+                                    <Label Text="{Binding FechaPedido, StringFormat='{0:dd/MM/yy}'}" FontSize="11" TextColor="#64748B" />
+                                    <Label Text="{Binding FechaPedido, StringFormat='{0:hh:mm tt}'}" FontSize="10" TextColor="#94A3B8" />
+                                </VerticalStackLayout>
+
+                                <!-- Cliente y Detalle -->
+                                <VerticalStackLayout Grid.Column="1" Spacing="2" VerticalOptions="Center">
+                                    <Label Text="{Binding ClienteNombre}" FontSize="14" FontAttributes="Bold" TextColor="#0F172A" LineBreakMode="TailTruncation" />
+                                    <Label Text="{Binding DetalleResumen}" FontSize="12" TextColor="#334155" LineBreakMode="TailTruncation" />
+                                    <Label Text="{Binding Ciudad, StringFormat='📍 {0}'}" FontSize="11" TextColor="#64748B" />
+                                </VerticalStackLayout>
+
+                                <!-- Total -->
+                                <VerticalStackLayout Grid.Column="2" Spacing="2" VerticalOptions="Center" HorizontalOptions="End" WidthRequest="110">
+                                    <Label Text="{Binding TotalFormateado}" FontSize="15" FontAttributes="Bold" TextColor="#16A34A" HorizontalOptions="End" />
+                                    <Label Text="{Binding Subtotal, StringFormat='Sub: ${0:N2}'}" FontSize="10" TextColor="#64748B" HorizontalOptions="End" />
+                                    <Label Text="{Binding Impuesto, StringFormat='ITBIS: ${0:N2}'}" FontSize="10" TextColor="#94A3B8" HorizontalOptions="End" />
+                                </VerticalStackLayout>
+
+                                <!-- Botón Imprimir Ticket -->
+                                <Button Grid.Column="3"
+                                        Text="🧾 Ticket"
+                                        Clicked="OnImprimirTicketItemClicked"
+                                        CommandParameter="{Binding .}"
+                                        BackgroundColor="#EFF6FF"
+                                        TextColor="#1D4ED8"
+                                        BorderColor="#BFDBFE"
+                                        BorderWidth="1"
+                                        FontSize="11"
+                                        FontAttributes="Bold"
+                                        HeightRequest="36"
+                                        CornerRadius="6"
+                                        Padding="10, 0"
+                                        VerticalOptions="Center" />
+                            </Grid>
+                        </Border>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
+
+            <ActivityIndicator x:Name="IndicadorCargaReportes" IsRunning="False" IsVisible="False" Color="#1E3A8A" HeightRequest="40" HorizontalOptions="Center" VerticalOptions="Center" />
+        </Grid>
+    </Grid>
+
+</ContentPage>

@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:models="clr-namespace:VentasApp_Tienda742.Models"
+             x:Class="VentasApp_Tienda742.Views.NuevaVentaPage"
+             Title="🛒 Nueva Venta"
+             BackgroundColor="#F8FAFC">
+
+    <ScrollView>
+        <VerticalStackLayout Padding="20" Spacing="16" MaximumWidthRequest="700">
+
+            <!-- Encabezado Corporativo -->
+            <Border BackgroundColor="#FFFFFF" Stroke="#E2E8F0" StrokeThickness="1" StrokeShape="RoundRectangle 12" Padding="16">
+                <VerticalStackLayout Spacing="4">
+                    <Label Text="🏪 TIENDA 742 JPV" FontSize="20" FontAttributes="Bold" TextColor="#1E3A8A" />
+                    <Label Text="Módulo Oficial de Ventas y Facturación Rápida" FontSize="13" TextColor="#475569" />
+                    <HorizontalStackLayout Spacing="8">
+                        <Label Text="🟢 SQL Server: 192.168.2.68:1433" FontSize="11" TextColor="#16A34A" FontAttributes="Bold" />
+                        <Label Text="•" FontSize="11" TextColor="#94A3B8" />
+                        <Label Text="BD: TiendaDB_742" FontSize="11" TextColor="#64748B" />
+                    </HorizontalStackLayout>
+                </VerticalStackLayout>
+            </Border>
+
+            <!-- Card: Formulario de Selección -->
+            <Border BackgroundColor="#FFFFFF" Stroke="#E2E8F0" StrokeThickness="1" StrokeShape="RoundRectangle 12" Padding="18">
+                <VerticalStackLayout Spacing="14">
+                    <Label Text="📝 Datos de la Transacción" FontSize="16" FontAttributes="Bold" TextColor="#0F172A" />
+
+                    <!-- Selector de Cliente -->
+                    <VerticalStackLayout Spacing="4">
+                        <Label Text="👤 Seleccionar Cliente:" FontSize="13" FontAttributes="Bold" TextColor="#334155" />
+                        <Border Stroke="#CBD5E1" StrokeThickness="1" StrokeShape="RoundRectangle 8" Padding="2" BackgroundColor="#FFFFFF">
+                            <Picker x:Name="PickerClientes"
+                                    Title="Seleccione un cliente..."
+                                    ItemDisplayBinding="{Binding DisplayText, x:DataType=models:Cliente}"
+                                    TextColor="#0F172A"
+                                    TitleColor="#94A3B8"
+                                    SelectedIndexChanged="OnClienteSeleccionado" />
+                        </Border>
+                    </VerticalStackLayout>
+
+                    <!-- Selector de Producto -->
+                    <VerticalStackLayout Spacing="4">
+                        <Label Text="📦 Seleccionar Producto:" FontSize="13" FontAttributes="Bold" TextColor="#334155" />
+                        <Border Stroke="#CBD5E1" StrokeThickness="1" StrokeShape="RoundRectangle 8" Padding="2" BackgroundColor="#FFFFFF">
+                            <Picker x:Name="PickerProductos"
+                                    Title="Seleccione un producto..."
+                                    ItemDisplayBinding="{Binding DisplayText, x:DataType=models:Producto}"
+                                    TextColor="#0F172A"
+                                    TitleColor="#94A3B8"
+                                    SelectedIndexChanged="OnProductoSeleccionado" />
+                        </Border>
+                    </VerticalStackLayout>
+
+                    <!-- Control de Cantidad y Stock -->
+                    <Grid ColumnDefinitions="*, Auto" RowDefinitions="Auto, Auto" ColumnSpacing="12" RowSpacing="6">
+                        <Label Grid.Row="0" Grid.Column="0" Text="🔢 Cantidad a Facturar:" FontSize="13" FontAttributes="Bold" TextColor="#334155" VerticalOptions="Center" />
+                        <Label Grid.Row="0" Grid.Column="1" x:Name="LblStockDisponible" Text="Stock: --" FontSize="12" FontAttributes="Bold" TextColor="#2563EB" VerticalOptions="Center" />
+
+                        <HorizontalStackLayout Grid.Row="1" Grid.ColumnSpan="2" Spacing="8" HorizontalOptions="Start">
+                            <Button Text="➖" Clicked="OnDisminuirCantidad" WidthRequest="48" HeightRequest="44" CornerRadius="8" BackgroundColor="#E2E8F0" TextColor="#0F172A" FontAttributes="Bold" />
+                            <Border Stroke="#CBD5E1" StrokeThickness="1" StrokeShape="RoundRectangle 8" WidthRequest="80" HeightRequest="44" BackgroundColor="#FFFFFF">
+                                <Entry x:Name="TxtCantidad"
+                                       Text="1"
+                                       Keyboard="Numeric"
+                                       HorizontalTextAlignment="Center"
+                                       VerticalTextAlignment="Center"
+                                       FontSize="16"
+                                       FontAttributes="Bold"
+                                       TextColor="#0F172A"
+                                       TextChanged="OnCantidadChanged" />
+                            </Border>
+                            <Button Text="➕" Clicked="OnAumentarCantidad" WidthRequest="48" HeightRequest="44" CornerRadius="8" BackgroundColor="#E2E8F0" TextColor="#0F172A" FontAttributes="Bold" />
+                        </HorizontalStackLayout>
+                    </Grid>
+                </VerticalStackLayout>
+            </Border>
+
+            <!-- Card: Resumen Financiero en Vivo -->
+            <Border BackgroundColor="#FFFFFF" Stroke="#E2E8F0" StrokeThickness="1" StrokeShape="RoundRectangle 12" Padding="18">
+                <VerticalStackLayout Spacing="10">
+                    <Label Text="💳 Resumen de la Venta" FontSize="16" FontAttributes="Bold" TextColor="#0F172A" />
+
+                    <Grid ColumnDefinitions="*, Auto" RowDefinitions="Auto, Auto, Auto" RowSpacing="6">
+                        <Label Grid.Row="0" Grid.Column="0" Text="Subtotal:" FontSize="14" TextColor="#475569" />
+                        <Label Grid.Row="0" Grid.Column="1" x:Name="LblSubtotal" Text="RD$ 0.00" FontSize="14" FontAttributes="Bold" TextColor="#0F172A" />
+
+                        <Label Grid.Row="1" Grid.Column="0" Text="ITBIS Estimado (18%):" FontSize="14" TextColor="#475569" />
+                        <Label Grid.Row="1" Grid.Column="1" x:Name="LblImpuesto" Text="RD$ 0.00" FontSize="14" FontAttributes="Bold" TextColor="#0F172A" />
+
+                        <BoxView Grid.Row="2" Grid.ColumnSpan="2" HeightRequest="1" Color="#E2E8F0" Margin="0, 4" />
+                    </Grid>
+
+                    <Grid ColumnDefinitions="*, Auto">
+                        <Label Text="TOTAL A PAGAR:" FontSize="18" FontAttributes="Bold" TextColor="#0F172A" VerticalOptions="Center" />
+                        <Label Grid.Column="1" x:Name="LblTotal" Text="RD$ 0.00" FontSize="20" FontAttributes="Bold" TextColor="#16A34A" VerticalOptions="Center" />
+                    </Grid>
+                </VerticalStackLayout>
+            </Border>
+
+            <!-- Botones de Acción -->
+            <VerticalStackLayout Spacing="10">
+                <Button Text="💾 PROCESAR VENTA Y GENERAR TICKET"
+                        Clicked="OnRegistrarVentaClicked"
+                        BackgroundColor="#1E3A8A"
+                        TextColor="#FFFFFF"
+                        FontSize="15"
+                        FontAttributes="Bold"
+                        HeightRequest="52"
+                        CornerRadius="10" />
+
+                <Button Text="🔄 Recargar Clientes y Productos"
+                        Clicked="OnRecargarClicked"
+                        BackgroundColor="#FFFFFF"
+                        TextColor="#475569"
+                        BorderColor="#CBD5E1"
+                        BorderWidth="1"
+                        FontSize="13"
+                        HeightRequest="42"
+                        CornerRadius="8" />
+            </VerticalStackLayout>
+
+            <ActivityIndicator x:Name="IndicadorCarga" IsRunning="False" IsVisible="False" Color="#1E3A8A" HeightRequest="40" />
+
+        </VerticalStackLayout>
+    </ScrollView>
+
+</ContentPage>
