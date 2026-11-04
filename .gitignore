@@ -1,11 +1,19 @@
-# Build outputs
-bin/
-obj/
+# Backups
+.backup/
 
-# User-specific files
+# Build outputs
+**/bin/
+**/obj/
+[Bb]in/
+[Oo]bj/
+
+# Visual Studio & IDE
 .vs/
 *.user
 *.suo
+*.userosscache
+*.sln.docstates
 
 # OS-generated files
 .DS_Store
+Thumbs.db

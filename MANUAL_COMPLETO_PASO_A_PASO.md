@@ -617,7 +617,12 @@ GO
 ## 6. ESTRUCTURA DEL PROYECTO Y ÁRBOL DE DIRECTORIOS
 
 ```
-VentasApp_Tienda742/
+VentasApp_Tienda742/                    <-- Raíz del Repositorio
+├── VentasApp_Tienda742.sln             <-- Solución principal (doble clic para abrir en Visual Studio)
+├── README.md                           <-- Documentación ejecutiva del proyecto
+├── MANUAL_COMPLETO_PASO_A_PASO.md      <-- Manual didáctico exhaustivo paso a paso
+├── TUTORIAL_MAESTRO_BRUTALISTA.html    <-- Masterclass interactiva web
+├── index.html                          <-- Portal web interactivo para GitHub Pages
 ├── global.json                         <-- Fijación de versión del SDK (.NET 9.0.318)
 ├── VentasApp_Tienda742.csproj          <-- Configuración de compilación y paquetes NuGet
 ├── MauiProgram.cs                      <-- Punto de entrada de la aplicación y licencia QuestPDF
@@ -2287,7 +2292,7 @@ dotnet build -f net9.0-windows10.0.19041.0
 
 ### 8.2 Ejecución de la Aplicación
 ```powershell
-dotnet run -f net9.0-windows10.0.19041.0
+dotnet run --project VentasApp_Tienda742 -f net9.0-windows10.0.19041.0
 ```
 
 ### 8.3 Flujo de Prueba Recomendado
